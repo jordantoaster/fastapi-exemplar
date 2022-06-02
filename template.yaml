@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: FastAPI on Lambda
+
+Resources:
+
+  Function: # Lambda
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: "FastAPILambda"
+      CodeUri: src
+      Handler: app.handler
+      Runtime: python3.9
+      Events: # routing
+        root:
+          Type: Api
+          Properties:
+            Path: /
+            Method: get
+        items:
+          Type: Api
+          Properties:
+            Path: /items
+            Method: get
+
+Outputs: # API gateway URL Output
+  APIUrl:
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
